@@ -1,0 +1,23 @@
+{
+  "name": "msa-qr-handler",
+  "version": "1.0.0",
+  "description": "MSA SRM Event — QR Attendance Backend Module",
+  "main": "qr-attendance/src/index.js",
+  "type": "module",
+  "scripts": {
+    "test": "node qr-attendance/tests/run-all.js",
+    "start": "node --env-file=.env qr-attendance/src/server.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.49.1",
+    "jsqr": "^1.4.0"
+  },
+  "keywords": [
+    "msa",
+    "srm",
+    "qr-attendance",
+    "supabase"
+  ],
+  "author": "MSA SRM",
+  "license": "ISC"
+}

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MSA SRM — QR Attendance Scanner</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      max-width: 480px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+      line-height: 1.5;
+    }
+    video {
+      width: 100%;
+      background: #111;
+      border: 1px solid #ccc;
+    }
+    canvas { display: none; }
+    button {
+      padding: 0.4rem 0.8rem;
+      margin: 0.25rem 0.25rem 0.25rem 0;
+      cursor: pointer;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 0.4rem;
+      margin: 0.4rem 0;
+      box-sizing: border-box;
+      font-family: monospace;
+    }
+    #result {
+      padding: 0.6rem;
+      margin-top: 0.75rem;
+      border: 1px solid #999;
+      font-family: monospace;
+      font-size: 0.9rem;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    #result.ok { border-color: #090; background: #eaffea; }
+    #result.warn { border-color: #960; background: #fff8e0; }
+    #result.err { border-color: #c00; background: #ffeaea; }
+    hr { margin: 1rem 0; border: none; border-top: 1px solid #ccc; }
+    small { color: #666; }
+  </style>
+</head>
+<body>
+  <h1>QR Attendance Scanner</h1>
+  <p><small>MSA SRM Event — Official Check-In</small></p>
+  <hr>
+
+  <video id="preview" playsinline></video>
+  <canvas id="canvas"></canvas>
+
+  <div>
+    <button id="startBtn">▶ Start Camera</button>
+    <button id="stopBtn" disabled>■ Stop</button>
+  </div>
+
+  <div id="result" hidden></div>
+
+  <hr>
+
+  <label for="manualToken"><strong>Manual token entry</strong></label>
+  <input type="text" id="manualToken" placeholder="Paste check-in token or URL">
+  <button id="submitManual">Submit</button>
+
+  <hr>
+  <p><small>Camera requires localhost or HTTPS. QR decoding via jsQR.</small></p>
+
+  <script src="/jsqr.js"></script>
+  <script src="/scanner.js"></script>
+</body>
+</html>

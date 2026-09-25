@@ -20,7 +20,7 @@ startBtn.addEventListener('click', startCamera);
 stopBtn.addEventListener('click', stopCamera);
 submitBtn.addEventListener('click', function () {
   var val = manualInput.value.trim();
-  if (val) processToken(val);
+  if (val) handleScannedData(val);
 });
 
 async function startCamera() {
@@ -101,7 +101,7 @@ function tick() {
     });
     if (code && code.data) {
       stopCamera();
-      processToken(code.data);
+      handleScannedData(code.data);
       return;
     }
   }
@@ -147,6 +147,84 @@ function showResult(type, text) {
   resultDiv.hidden = false;
   resultDiv.className = type;
   resultDiv.textContent = text;
+}
+
+// DEMO-ONLY: static QR check for presentation purposes. Does not verify against real participant data or record attendance. Real check-in logic is unaffected and unused here.
+var DEMO_MODE = true; // Toggle flag: true for client-side demo check, false for live backend check-in
+var EXPECTED_DEMO_QR = 'https://msasrm.in/';
+
+function checkDemoQR(scannedText) {
+  if (scannedText === EXPECTED_DEMO_QR) {
+    showDemoSuccess();
+  } else {
+    showResult('err', 'INVALID QR — not registered or deactivated');
+  }
+}
+
+function showDemoSuccess() {
+  resultDiv.hidden = false;
+  resultDiv.className = 'ok';
+  resultDiv.textContent = '';
+
+  var statusText = document.createElement('div');
+  statusText.textContent = 'Valid — Participant\n';
+  resultDiv.appendChild(statusText);
+
+  var openBtn = document.createElement('a');
+  openBtn.id = 'demoOpenLink';
+  openBtn.role = 'button';
+  openBtn.href = EXPECTED_DEMO_QR;
+  openBtn.target = '_blank';
+  openBtn.rel = 'noopener noreferrer';
+  openBtn.textContent = 'Open ' + EXPECTED_DEMO_QR;
+  openBtn.style.display = 'inline-block';
+  openBtn.style.marginTop = '0.5rem';
+  openBtn.style.padding = '0.4rem 0.8rem';
+  openBtn.style.background = '#090';
+  openBtn.style.color = '#fff';
+  openBtn.style.textDecoration = 'none';
+  openBtn.style.borderRadius = '3px';
+  resultDiv.appendChild(openBtn);
+}
+
+function initDemoModeToggle() {
+  var container = document.createElement('div');
+  container.style.marginTop = '0.5rem';
+  container.style.fontSize = '0.85rem';
+  container.style.color = '#555';
+
+  var label = document.createElement('label');
+  label.style.cursor = 'pointer';
+
+  var checkbox = document.createElement('input');
+  checkbox.type = 'checkbox';
+  checkbox.id = 'demoModeToggle';
+  checkbox.checked = DEMO_MODE;
+  checkbox.style.marginRight = '0.4rem';
+  checkbox.addEventListener('change', function () {
+    DEMO_MODE = checkbox.checked;
+    showResult('', DEMO_MODE ? 'Demo mode active (verifies against https://msasrm.in/)' : 'Live mode active (submits to /api/checkin)');
+  });
+
+  label.appendChild(checkbox);
+  var span = document.createElement('span');
+  span.textContent = 'Demo Mode (static QR check)';
+  label.appendChild(span);
+  container.appendChild(label);
+
+  var buttonsParent = startBtn && startBtn.parentNode;
+  if (buttonsParent) {
+    buttonsParent.appendChild(container);
+  }
+}
+initDemoModeToggle();
+
+function handleScannedData(data) {
+  if (DEMO_MODE) {
+    checkDemoQR(data);
+  } else {
+    processToken(data);
+  }
 }
 
 window.addEventListener('pagehide', stopCamera);

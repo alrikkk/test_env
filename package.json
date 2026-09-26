@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "test": "node qr-attendance/tests/run-all.js",
-    "start": "node --env-file=.env qr-attendance/src/server.js"
+    "start": "node --env-file=.env qr-attendance/src/server.js",
+    "dev": "node --watch --env-file=.env qr-attendance/src/server.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.49.1",
